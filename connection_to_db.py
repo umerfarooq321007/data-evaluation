@@ -26,7 +26,6 @@ exercise_collection = "exercises"
 data = list(db[exercise_collection].find({ "date": { "$gt": datetime.datetime.fromisoformat('2021-07-26'),
                                         "$lt": datetime.datetime.fromisoformat('2021-08-01') }}))
 print(len(data))
-server.stop()
 from collections import defaultdict
 
 
@@ -55,16 +54,15 @@ for user in new_list:
     i = 0
     while date_now > date_7_days:
         dates_entered = [date_now for u in user if u["date"].date() == date_now]
-        print("Dates Entered: ", len(dates_entered))
         if len(dates_entered) == 0:
 
             user.append({
                 "steps": steps_mean,
-                "date": datetime.datetime.now() - datetime.timedelta(i).date(),
+                "date": datetime.datetime.now() - datetime.timedelta(i),
                 "user": user[0]["user"]
             })
         i = i + 1
-        # date_now = (date_now - datetime.timedelta(1))
+        date_now = (date_now - datetime.timedelta(1))
 
         # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user)
         # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> New user")
