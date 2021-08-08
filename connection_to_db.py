@@ -47,25 +47,31 @@ for user in new_list:
     # print(exercise_dates)
     steps = [x["steps"] for x in user]
     steps_mean = np.mean(steps)
-    date_now = datetime.datetime.now().date()
-    date_7_days = (datetime.datetime.now() - datetime.timedelta(7)).date()
+    date_now_datetime = datetime.datetime(2021, 8, 1)
+    date_now = date_now_datetime.date()
+    date_7_days = (date_now_datetime - datetime.timedelta(7)).date()
     
-    # print("Before >>>>>>>>>>>>>>>>>>>>>>>>>>><", user)
     i = 0
     while date_now > date_7_days:
+        # dates_entered = []
+        # for u in user:
+        #     print('date from db ', u["date"].date())
+        #     print("date_now ", date_now)
+        #     if u["date"].date() == date_now:
+        #         dates_entered.append(date_now)
         dates_entered = [date_now for u in user if u["date"].date() == date_now]
+        
         if len(dates_entered) == 0:
 
-            user.append({
+             user.append({
                 "steps": steps_mean,
-                "date": datetime.datetime.now() - datetime.timedelta(i),
+                "date": date_now_datetime - datetime.timedelta(i),
                 "user": user[0]["user"]
             })
         i = i + 1
-        date_now = (date_now - datetime.timedelta(1))
-
-        # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user)
-        # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> New user")
+        date_now = date_now - datetime.timedelta(1)
+    # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user)
+    # print("After >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> New user")
 
 
     # Date sorting
@@ -73,20 +79,11 @@ for user in new_list:
     
     days = [u["date"].strftime('%A') for u in user]
     steps = [u["steps"] for u in user]
+    
     steps_per_user.append(steps)
     
     plt.plot(days, steps, label = f"user {j}")
 
-plt.xlabel('Day')
-# naming the y axis
-plt.ylabel('Steps')
-# giving a title to my graph
-plt.title('No. of steps per day')
-  
-# show a legend on the plot
-plt.legend()
-  
-# function to show the plot
 plt.show()
 
 # Plot Mean 
@@ -115,8 +112,8 @@ plt.show()
 
 # Plot standard deviation
 std_steps = np.std(steps_per_user_np, axis=0) 
-std_steps_plus = mean_by_day + std_steps
-std_steps_minus = mean_by_day - std_steps
+std_steps_plus = mean_by_day + std_steps/2
+std_steps_minus = mean_by_day - std_steps/2
 
 plt.plot(days, mean_by_day, label = "mean")
 plt.plot(days, std_steps_plus, label = "standard deviation upper")
